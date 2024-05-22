@@ -3,6 +3,7 @@ const router = new express.Router();
 const passport = require('../passport').getPassport();
 const db = require('../../db');
 const passportType = passport.type;
+const { logger } = require('../../logging/index');
 
 router.get('/', (req, res) => {
   res.status(200).json({
@@ -23,13 +24,13 @@ router.get('/', (req, res) => {
 
 router.post('/login', passport.authenticate(passportType), async (req, res) => {
   try {
-    console.log(
-      `serivce.routes.auth.login: user logged in, username=${
+    logger.info(
+      `service.routes.auth.login: user logged in, username=${
         req.user.username
       } profile=${JSON.stringify(req.user)}`,
     );
   } catch (e) {
-    console.log(`service.routes.auth.login: Error logging user in ${JSON.stringify(e)}`);
+    logger.error(`service.routes.auth.login: Error logging user in ${JSON.stringify(e)}`);
     res.status(500).send('Failed to login').end();
     return;
   }
@@ -41,7 +42,7 @@ router.post('/login', passport.authenticate(passportType), async (req, res) => {
 
 // when login is successful, retrieve user info
 router.get('/success', (req, res) => {
-  console.log('authenticated' + JSON.stringify(req.user));
+  logger.info('authenticated' + JSON.stringify(req.user));
   if (req.user) {
     res.json({
       success: true,
@@ -92,7 +93,7 @@ router.post('/gitAccount', async (req, res) => {
 
       const user = await db.findUser(login);
 
-      console.log('Adding gitAccount' + req.body.gitAccount);
+      logger.info('Adding gitAccount' + req.body.gitAccount);
       user.gitAccount = req.body.gitAccount;
       db.updateUser(user);
       res.status(200).end();

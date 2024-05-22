@@ -1,4 +1,6 @@
 const connect = require('./helper').connect;
+const { logger } = require('/src/logging/index');
+
 const usersCollection = 'users';
 
 exports.findUser = async function (username) {
@@ -7,7 +9,7 @@ exports.findUser = async function (username) {
 };
 
 exports.getUsers = async function (query) {
-  console.log(`Getting users for query= ${JSON.stringify(query)}`);
+  logger.info(`Getting users for query= ${JSON.stringify(query)}`);
   const collection = await connect(usersCollection);
   return collection.find(query).toArray();
 };

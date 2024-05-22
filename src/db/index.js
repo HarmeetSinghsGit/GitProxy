@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const config = require('../config');
+const { logger } = require('../logging/index');
 let sink;
 if (config.getDatabase().type === 'mongo') {
   sink = require('../db/mongo');
@@ -8,7 +9,7 @@ if (config.getDatabase().type === 'mongo') {
 }
 
 module.exports.createUser = async (username, password, email, gitAccount, admin = false) => {
-  console.log(
+  logger.info(
     `creating user
         user=${username},
         gitAccount=${gitAccount}

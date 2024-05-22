@@ -1,11 +1,12 @@
 const express = require('express');
 const router = new express.Router();
 const db = require('../../db');
+const { logger } = require('../../logging/index');
 
 router.get('/', async (req, res) => {
   const query = {};
 
-  console.log(`fetching users = query path =${JSON.stringify(req.query)}`);
+  logger.info(`fetching users = query path =${JSON.stringify(req.query)}`);
   for (const k in req.query) {
     if (!k) continue;
 
@@ -22,7 +23,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   const username = req.params.id.toLowerCase();
-  console.log(`Retrieving details for user: ${username}`);
+  logger.info(`Retrieving details for user: ${username}`);
   const data = await db.findUser(username);
   const user = JSON.parse(JSON.stringify(data));
   delete user.password;

@@ -30,7 +30,7 @@ description: JSON schema reference documentation for Git Proxy
 ${schemaDoc}
 `;
   writeFileSync(OUTPUT_PATH, docString);
-  console.log(`Wrote schema reference to ${OUTPUT_PATH}`);
+  console.info(`Wrote schema reference to ${OUTPUT_PATH}`);
 } catch (err) {
   console.error(err);
 }

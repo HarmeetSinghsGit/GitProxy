@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 /* eslint-disable max-len */
+const { logger } = require('./src/logging/index');
+
 const argv = require('yargs/yargs')(process.argv.slice(2))
   .usage('Usage: $0 [options]')
   .options({
@@ -25,14 +27,14 @@ if (argv.v) {
   const fs = require('fs');
 
   if (!fs.existsSync(config.configFile)) {
-    console.error(
+    logger.error(
       `Config file ${config.configFile} doesn't exist, nothing to validate! Did you forget -c/--config?`,
     );
     process.exit(1);
   }
 
   config.validate();
-  console.log(`${config.configFile} is valid`);
+  logger.info(`${config.configFile} is valid`);
   process.exit(0);
 }
 

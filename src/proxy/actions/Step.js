@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
+const { logger } = require('../../logging/index');
 
 /** Class representing a Push. */
 class Step {
@@ -39,7 +40,7 @@ class Step {
   setError(message) {
     this.error = true;
     this.errorMessage = message;
-    this.log(message);
+    this.log(message, true);
   }
 
   /**
@@ -64,11 +65,17 @@ class Step {
   /**
    *
    * @param {*} message
+   * @param {boolean} isError
    */
-  log(message) {
+  log(message, isError = false) {
     const m = `${this.stepName} - ${message}`;
     this.logs.push(m);
-    console.info(m);
+
+    if (isError) {
+      logger.error(m);
+    } else {
+      logger.info(m);
+    }
   }
 }
 

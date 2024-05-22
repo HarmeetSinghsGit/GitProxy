@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { getCookie } from '../utils.jsx';
+const { logger } = require('../../logging/index');
 
 const baseUrl = import.meta.env.VITE_API_URI
   ? `${import.meta.env.VITE_API_URI}`
@@ -16,7 +17,7 @@ const getUser = async (setIsLoading, setData, setAuth, setIsError, id = null) =>
     url = `${baseUrl}/api/v1/user/${id}`;
   }
 
-  console.log(url);
+  logger.info(url);
 
   await axios(url, config)
     .then((response) => {
@@ -66,12 +67,12 @@ const getUsers = async (setIsLoading, setData, setAuth, setIsError, query = {}) 
 };
 
 const updateUser = async (data) => {
-  console.log(data);
+  logger.info(data);
   const url = new URL(`${baseUrl}/api/auth/gitAccount`);
   await axios
     .post(url, data, { withCredentials: true, headers: { 'X-CSRF-TOKEN': getCookie('csrf') } })
     .catch((error) => {
-      console.log(error.response.data.message);
+      logger.error(error.response.data.message);
       throw error;
     });
 };

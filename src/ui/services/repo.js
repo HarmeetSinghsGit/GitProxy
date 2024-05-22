@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { getCookie } from '../utils.jsx';
+const { logger } = require('../../logging/index');
 
 const baseUrl = import.meta.env.VITE_API_URI
   ? `${import.meta.env.VITE_API_URI}/api/v1`
@@ -82,7 +83,7 @@ const addRepo = async (onClose, setError, data) => {
       onClose();
     })
     .catch((error) => {
-      console.log(error.response.data.message);
+      logger.error(error.response.data.message);
       setError(error.response.data.message);
     });
 };
@@ -95,11 +96,11 @@ const addUser = async (repoName, user, action) => {
     await axios
       .patch(url, data, { withCredentials: true, headers: { 'X-CSRF-TOKEN': getCookie('csrf') } })
       .catch((error) => {
-        console.log(error.response.data.message);
+        logger.error(error.response.data.message);
         throw error;
       });
   } else {
-    console.log('Duplicate user can not be added');
+    logger.info('Duplicate user can not be added');
     throw new DupUserValidationError();
   }
 };
@@ -110,7 +111,7 @@ const deleteUser = async (user, repoName, action) => {
   await axios
     .delete(url, { withCredentials: true, headers: { 'X-CSRF-TOKEN': getCookie('csrf') } })
     .catch((error) => {
-      console.log(error.response.data.message);
+      logger.error(error.response.data.message);
       throw error;
     });
 };
@@ -121,7 +122,7 @@ const deleteRepo = async (repoName) => {
   await axios
     .delete(url, { withCredentials: true, headers: { 'X-CSRF-TOKEN': getCookie('csrf') } })
     .catch((error) => {
-      console.log(error.response.data.message);
+      logger.error(error.response.data.message);
       throw error;
     });
 };

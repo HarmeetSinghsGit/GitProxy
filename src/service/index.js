@@ -8,6 +8,7 @@ const config = require('../config');
 const db = require('../db');
 const rateLimit = require('express-rate-limit');
 const lusca = require('lusca');
+const { logger } = require('../logging/index');
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -71,7 +72,9 @@ const start = async () => {
 
   _httpServer.listen(uiPort);
 
-  console.log(`Service Listening on ${uiPort}`);
+  logger.info(`Service Listening on ${uiPort}`, {
+    filename: 'service/index.js',
+  });
   app.emit('ready');
 
   return app;
